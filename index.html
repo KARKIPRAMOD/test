@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ESP32 Location Receiver</title>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+      import {
+        getFirestore,
+        doc,
+        setDoc,
+      } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyAWfIA76fZNUhmN9nuHTjpOVVYwlQd-2Ms",
+        authDomain: "kata-chau-8e26e.firebaseapp.com",
+        projectId: "kata-chau-8e26e",
+        storageBucket: "kata-chau-8e26e.appspot.com",
+        messagingSenderId: "484998455956",
+        appId: "1:484998455956:web:09ee9c54b429c57eb88a81",
+        measurementId: "G-ZDQ17XERFK",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      async function submitLocation(lat, lon) {
+        try {
+          // Set the latitude and longitude in Firestore
+          await setDoc(doc(db, "locations", "esp32-location"), {
+            latitude: lat,
+            longitude: lon,
+          });
+          console.log("Location stored successfully:", lat, lon);
+        } catch (error) {
+          console.error("Error storing location:", error);
+        }
+      }
+
+      // Fetch the query parameters from the URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const lat = urlParams.get("lat");
+      const lon = urlParams.get("lon");
+
+      if (lat && lon) {
+        submitLocation(lat, lon);
+      }
+    </script>
+  </head>
+  <body>
+    <h1>ESP32 Location Receiver</h1>
+    <p>Receiving location data...</p>
+  </body>
+</html>
